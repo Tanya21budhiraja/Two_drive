@@ -1,28 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Simulating an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Simulating a successful registration
-      console.log("Registration submitted:", { email, password });
-      toast.success("Registration successful!");
+    const res = await axios.post("http://localhost:2000/api/users/register", {
+      name,
+      email,
+      password,
+    });
 
-      // Redirect to the file upload page
-      setTimeout(() => navigate("/upload"), 2000);
-    } catch (error) {
-      toast.error("Registration failed. Please try again.");
-    }
+    console.log("SERVER RESPONSE: ", res.data);
+    navigate("/upload");
   };
 
   return (
@@ -30,6 +28,12 @@ function Register() {
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
+              Name
+            </label>
+            <input id="name" type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          </div>
           <div>
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
               Email
