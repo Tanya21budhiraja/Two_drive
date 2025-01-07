@@ -1,5 +1,5 @@
 import express from "express";
-import { Access } from "../models/share.js"; // Correct path and include the file extension
+import { Access } from "../models/share.js";
 
 const router = express.Router();
 

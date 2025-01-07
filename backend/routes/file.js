@@ -10,10 +10,9 @@ const router = express.Router();
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "ap-south-1", // Replace with your AWS region
+  region: "ap-south-1",
 });
 
-// Upload File Route
 router.post("/upload", async (req, res) => {
   try {
     const { owner, name, size, type, fileBuffer } = req.body;
@@ -34,7 +33,6 @@ router.post("/upload", async (req, res) => {
 
     const s3Response = await s3.upload(uploadParams).promise();
 
-    // Save File Info to MongoDB
     const file = new File({
       owner,
       name,

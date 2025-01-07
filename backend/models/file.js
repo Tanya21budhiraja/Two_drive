@@ -24,7 +24,7 @@ const fileSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt
+  { timestamps: true }
 );
 
 export const File = mongoose.model("File", fileSchema);
