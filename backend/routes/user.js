@@ -11,9 +11,7 @@ router.post("/register", async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res
-        .status(401)
-        .json({ message: "User already exists. Please log in." });
+      return res.status(401).json({ message: "User already exists. Please log in." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,19 +38,15 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log("LOGIN: ", email, password);
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "No user found with this email. Please register." });
+      return res.status(400).json({ message: "No user found with this email. Please register." });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res
-        .status(400)
-        .json({ message: "Incorrect password. Please try again." });
+      return res.status(400).json({ message: "Incorrect password. Please try again." });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {

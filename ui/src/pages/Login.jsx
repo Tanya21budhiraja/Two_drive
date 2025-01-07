@@ -1,11 +1,10 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
-import "react-toastify/dist/ReactToastify.css"; // Import the styles for toast notifications
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
-function Register() {
-  const [name, setName] = useState("");
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -14,21 +13,17 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:2000/api/users/register", {
-        name,
+      const res = await axios.post("http://localhost:2000/api/users/login", {
         email,
         password,
       });
 
       console.log("SERVER RESPONSE: ", res.data);
 
-      // Show success toast
-      toast.success(res.data.message || "Registration successful!");
+      toast.success(res.data.message || "Login successful!");
 
-      // Redirect to another page (e.g., /upload)
       navigate("/upload");
     } catch (error) {
-      // Show error toast
       toast.error(error.response?.data?.message || "An error occurred!");
     }
   };
@@ -36,14 +31,8 @@ function Register() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
-              Name
-            </label>
-            <input id="name" type="text" placeholder="Enter your name" value={name} onChange={(e) => setName(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-          </div>
           <div>
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
               Email
@@ -57,19 +46,19 @@ function Register() {
             <input id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
           </div>
           <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-            Register
+            Login
           </button>
         </form>
         <div className="py-2">
-          Already have an account?{" "}
-          <Link to={"/login"} className="text-blue-700">
-            Login
+          Don't have an account?{" "}
+          <Link to={"/register"} className="text-blue-700">
+            Register here
           </Link>
         </div>
       </div>
-      <ToastContainer /> {/* Add ToastContainer component here */}
+      <ToastContainer />
     </div>
   );
 }
 
-export default Register;
+export default Login;
