@@ -28,4 +28,5 @@ app.get("/get", (req, res) => {
 
 // Start the backend server
 const PORT = 2000;
+console.log("HELLO FROM TUSHAR");
 app.listen(PORT, () => console.log(`Backend server running on http://localhost:${PORT}`));
