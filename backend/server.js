@@ -4,10 +4,12 @@ import mongoose from "mongoose";
 import fileRoutes from "./routes/file.js";
 import sharingRoutes from "./routes/sharing.js";
 import userRoutes from "./routes/user.js";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const mongoURI = process.env.DATABASE_URL;
 
