@@ -1,8 +1,8 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -20,9 +20,13 @@ function Login() {
 
       console.log("SERVER RESPONSE: ", res.data);
 
-      toast.success(res.data.message || "Login successful!");
-
-      navigate("/upload");
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token); // Store token in localStorage
+        toast.success(res.data.message || "Login successful!");
+        navigate("/upload");
+      } else {
+        toast.error("Token not received. Please try again.");
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred!");
     }
@@ -34,18 +38,43 @@ function Login() {
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
               Email
             </label>
-            <input id="email" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
               Password
             </label>
-            <input id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
           </div>
-          <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
             Login
           </button>
         </form>
