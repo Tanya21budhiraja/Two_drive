@@ -19,10 +19,10 @@ mongoose
   .catch((err) => console.error("Failed to connect to MongoDB:", err));
 
 app.use("/api/users", userRoutes);
-app.use("/api/files", fileRoutes); // Set up the file routes
-app.use("/api/sharing", sharingRoutes); // Set up the sharing routes
+app.use("/api/files", fileRoutes); 
+app.use("/api/sharing", sharingRoutes);
 
-// Base Route
+
 app.get("/get", (req, res) => {
   res.send("Backend is running with models!");
   console.log("done");

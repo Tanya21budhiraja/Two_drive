@@ -13,7 +13,7 @@ const s3 = new AWS.S3({
   region: "ap-south-1",
 });
 
-// fetch all files by userid
+
 
 router.post("/upload", async (req, res) => {
   try {
