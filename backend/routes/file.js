@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import dotenv from "dotenv";
 import express from "express";
+import multer from "multer";
 import { File } from "../models/file.js";
 
 dotenv.config();
@@ -14,41 +15,53 @@ const s3 = new AWS.S3({
 });
 
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-router.post("/upload", async (req, res) => {
+router.post("/upload", upload.single("file"), async (req, res) => {
   try {
-    const { owner, name, size, type, fileBuffer } = req.body;
+    const file = req.file;
 
-    if (!owner || !name || !size || !type || !fileBuffer) {
-      return res.status(400).json({ error: "Missing required fields." });
+    if (!file) {
+      return res.status(400).json({ error: "No file uploaded." });
     }
 
+    const { originalname: name, mimetype: type, size } = file;
     const fileKey = `${Date.now()}-${name}`;
-    const buffer = Buffer.from(fileBuffer, "base64");
 
     const uploadParams = {
       Bucket: process.env.S3_BUCKET_NAME,
       Key: fileKey,
-      Body: buffer,
+      Body: file.buffer,
       ContentType: type,
     };
 
     const s3Response = await s3.upload(uploadParams).promise();
 
-    const file = new File({
-      owner,
+    
+    const savedFile = new File({
+      owner: "unknown", 
       name,
       s3Url: s3Response.Location,
       size,
       type,
     });
 
-    await file.save();
+    await savedFile.save();
 
-    res.status(201).json(file);
+    res.status(201).json({
+      message: "File uploaded successfully.",
+      file: {
+        name,
+        size,
+        type,
+        url: s3Response.Location,
+        uploadDate: savedFile.createdAt,
+      },
+    });
   } catch (err) {
     console.error("Upload Error:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "An error occurred while uploading the file." });
   }
 });
 

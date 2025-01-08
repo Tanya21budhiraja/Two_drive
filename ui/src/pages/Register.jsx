@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
-import "react-toastify/dist/ReactToastify.css"; // Import the styles for toast notifications
+import { ToastContainer, toast } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css"; 
 
 function Register() {
   const [name, setName] = useState("");
@@ -22,13 +22,12 @@ function Register() {
 
       console.log("SERVER RESPONSE: ", res.data);
 
-      // Show success toast
       toast.success(res.data.message || "Registration successful!");
 
-      // Redirect to another page (e.g., /upload)
+      
       navigate("/upload");
     } catch (error) {
-      // Show error toast
+    
       toast.error(error.response?.data?.message || "An error occurred!");
     }
   };
